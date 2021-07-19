@@ -1,0 +1,27 @@
+name: Manticore CI
+
+on: workflow_dispatch
+
+jobs:
+  run_tests:
+    name: Run manticore audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install packages
+        run: npm install
+      - name: Install manticore
+        run: pip install manticore==0.3.6
+      - name: Compile contracts
+        run: npx hardhat compile
+      - name: Run manticore
+        run: manticore . --contract Overflow --thorough-mode --workspace summary
+      - name: Check if there is any issue
+        run: chmod +x ./.github/scripts/manticore-check.sh && ./.github/scripts/manticore-check.sh
+      
