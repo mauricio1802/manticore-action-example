@@ -26,7 +26,7 @@ jobs:
       - name: Compile contracts
         run: npx hardhat compile
       - name: Run manticore
-        run: manticore . --contract ${{github.events.inputs.contract}} --thorough-mode --workspace summary
+        run: manticore . --contract ${{ github.event.inputs.contract }} --thorough-mode --workspace summary
       - name: Check if there is any issue
         run: chmod +x ./.github/scripts/manticore-check.sh && ./.github/scripts/manticore-check.sh
       
